@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fylo - All your files in one secure location</title>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --navy-850: hsl(217, 28%, 15%);
+            --navy-900: hsl(218, 28%, 13%);
+            --navy-950: hsl(216, 53%, 9%);
+            --navy-800: hsl(219, 30%, 18%);
+            --teal-200: hsl(176, 68%, 64%);
+            --cyan-500: hsl(198, 60%, 50%);
+            --red-500: hsl(0, 100%, 63%);
+            --white: hsl(0, 0%, 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 14px;
+            color: var(--white);
+            background-color: var(--navy-900);
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Raleway', sans-serif;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            background-color: var(--navy-850);
+            padding: 24px 0;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Raleway', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo::before {
+            content: '';
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(45deg, var(--teal-200), var(--cyan-500));
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 40px;
+        }
+
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            font-family: 'Raleway', sans-serif;
+            transition: opacity 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+
+        /* Mobile Menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background-color: var(--white);
+            margin: 3px 0;
+            transition: 0.3s;
+            border-radius: 2px;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(-45deg) translate(-5px, 6px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(45deg) translate(-5px, -6px);
+        }
+
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 80%;
+            max-width: 300px;
+            height: 100vh;
+            background-color: var(--navy-950);
+            padding: 80px 40px 40px;
+            transition: right 0.3s ease;
+            z-index: 1000;
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .mobile-menu.active {
+            right: 0;
+        }
+
+        .mobile-menu .nav-links {
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        .mobile-menu .nav-links a {
+            font-size: 18px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--navy-800);
+        }
+
+        .mobile-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .mobile-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Hero Section */
+        .hero {
+            background-color: var(--navy-850);
+            padding: 80px 0 120px;
+            text-align: center;
+        }
+
+        .hero-illustration {
+            width: 100%;
+            max-width: 600px;
+            height: 300px;
+            margin: 0 auto 48px;
+            background: url('./images/illustration-intro.png') no-repeat center;
+            background-size: contain;
+        }
+
+        .hero h1 {
+            font-size: 40px;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 24px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero p {
+            font-size: 18px;
+            max-width: 520px;
+            margin: 0 auto 32px;
+            opacity: 0.9;
+        }
+
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--teal-200), var(--cyan-500));
+            color: var(--white);
+            padding: 16px 80px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-family: 'Raleway', sans-serif;
+            font-weight: 700;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(96, 165, 250, 0.3);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 100px 0;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 80px 60px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .feature {
+            text-align: center;
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 32px;
+            background: var(--navy-800);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: var(--teal-200);
+        }
+
+        .feature h3 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .feature p {
+            opacity: 0.9;
+            line-height: 1.7;
+        }
+
+        /* Productive Section */
+        .productive {
+            padding: 80px 0;
+        }
+
+        .productive-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .productive-illustration {
+            width: 100%;
+            height: 400px;
+            background: url('./images/illustration-stay-productive.png') no-repeat center;
+            background-size: contain;
+        }
+
+        .productive-text h2 {
+            font-size: 36px;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 24px;
+        }
+
+        .productive-text p {
+            margin-bottom: 24px;
+            opacity: 0.9;
+            line-height: 1.7;
+        }
+
+        .productive-link {
+            color: var(--teal-200);
+            text-decoration: none;
+            border-bottom: 1px solid var(--teal-200);
+            padding-bottom: 4px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: opacity 0.3s ease;
+        }
+
+        .productive-link:hover {
+            opacity: 0.8;
+        }
+
+        /* Testimonials */
+        .testimonials {
+            padding: 100px 0;
+            background-color: var(--navy-800);
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            position: relative;
+        }
+
+        .testimonial {
+            background-color: var(--navy-900);
+            padding: 40px 32px 32px;
+            border-radius: 8px;
+            position: relative;
+        }
+
+        .testimonial::before {
+            content: '"';
+            position: absolute;
+            top: -10px;
+            left: -5px;
+            font-size: 80px;
+            color: var(--teal-200);
+            opacity: 0.1;
+            line-height: 1;
+        }
+
+        .testimonial p {
+            margin-bottom: 24px;
+            line-height: 1.7;
+            opacity: 0.9;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .author-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--teal-200), var(--cyan-500));
+        }
+
+        .author-info h4 {
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .author-info p {
+            font-size: 10px;
+            opacity: 0.7;
+            margin: 0;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 0 0 100px;
+            position: relative;
+        }
+
+        .cta-box {
+            background-color: var(--navy-850);
+            padding: 48px 40px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta h2 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 24px;
+        }
+
+        .cta p {
+            margin-bottom: 32px;
+            opacity: 0.9;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-form {
+            display: flex;
+            gap: 20px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .input-container {
+            flex: 1;
+            position: relative;
+        }
+
+        .cta-input {
+            width: 100%;
+            padding: 16px 24px;
+            border: 2px solid transparent;
+            border-radius: 50px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .cta-input.error {
+            border-color: var(--red-500);
+        }
+
+        .cta-input.success {
+            border-color: var(--teal-200);
+        }
+
+        .cta-input::placeholder {
+            color: #999;
+        }
+
+        .error-message {
+            position: absolute;
+            top: 100%;
+            left: 24px;
+            color: var(--red-500);
+            font-size: 12px;
+            margin-top: 4px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .error-message.show {
+            opacity: 1;
+        }
+
+        .success-message {
+            position: absolute;
+            top: 100%;
+            left: 24px;
+            color: var(--teal-200);
+            font-size: 12px;
+            margin-top: 4px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .success-message.show {
+            opacity: 1;
+        }
+
+        .btn-cta {
+            background: linear-gradient(135deg, var(--teal-200), var(--cyan-500));
+            color: var(--white);
+            padding: 16px 32px;
+            border-radius: 50px;
+            border: none;
+            font-family: 'Raleway', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .btn-cta:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--navy-950);
+            padding: 100px 0 40px;
+            margin-top: -50px;
+            padding-top: 150px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+            gap: 60px;
+            margin-bottom: 40px;
+        }
+
+        .footer-logo {
+            font-family: 'Raleway', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 32px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .footer-logo::before {
+            content: '';
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(45deg, var(--teal-200), var(--cyan-500));
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        .footer-info {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+        }
+
+        .contact-item i {
+            margin-top: 4px;
+            color: var(--teal-200);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: var(--white);
+            text-decoration: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            opacity: 0.8;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 16px;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            text-decoration: none;
+            transition: color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .social-link:hover {
+            color: var(--teal-200);
+            border-color: var(--teal-200);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                gap: 20px;
+            }
+
+            .hero h1 {
+                font-size: 28px;
+            }
+
+            .hero p {
+                font-size: 16px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 60px;
+            }
+
+            .productive-content {
+                grid-template-columns: 1fr;
+                gap: 60px;
+                text-align: center;
+            }
+
+            .productive-text h2 {
+                font-size: 28px;
+            }
+
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-form {
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .container {
+                padding: 0 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .cta-box {
+                padding: 32px 24px;
+            }
+
+            .cta h2 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                  <img src="images/logo.svg" alt="">
+                <ul class="nav-links">
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#team">Team</a></li>
+                    <li><a href="#signin">Sign In</a></li>
+                </ul>
+                <div class="hamburger" id="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </nav>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div class="mobile-overlay" id="mobileOverlay"></div>
+        <div class="mobile-menu" id="mobileMenu">
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#team">Team</a></li>
+                <li><a href="#signin">Sign In</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-illustration"></div>
+            <h1>All your files in one secure location, accessible anywhere.</h1>
+            <p>Fylo stores all your most important files in one secure location. Access them wherever you need, share and collaborate with friends family, and co-workers.</p>
+            <a href="#" class="btn">Get Started</a>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="features-grid">
+                <div class="feature">
+                    
+                    <h3>Access your files, anywhere</h3>
+                    <p>The ability to use a smartphone, tablet, or computer to access your account means your files follow you everywhere.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Security you can trust</h3>
+                    <p>2-factor authentication and user-controlled encryption are just a couple of the security features we allow to help secure your files.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3>Real-time collaboration</h3>
+                    <p>Securely share files and folders with friends, family and colleagues for live collaboration. No email attachments required.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">
+                        <i class="fas fa-folder"></i>
+                    </div>
+                    <h3>Store any type of file</h3>
+                    <p>Whether you're sharing holidays photos or work documents, Fylo has you covered allowing for all file types to be securely stored and shared.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Productive Section -->
+    <section class="productive">
+        <div class="container">
+            <div class="productive-content">
+                <div class="productive-illustration"></div>
+                <div class="productive-text">
+                    <h2>Stay productive, wherever you are</h2>
+                    <p>Never let location be an issue when accessing your files. Fylo has you covered for all of your file storage needs.</p>
+                    <p>Securely share files and folders with friends, family and colleagues for live collaboration. No email attachments required.</p>
+                    <a href="#" class="productive-link">
+                        See how Fylo works
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials" id="team">
+        <div class="container">
+            <div class="testimonials-grid">
+                <div class="testimonial">
+                    <p>Fylo has improved our team productivity by an order of magnitude. Since making the switch our team has become a well-oiled collaboration machine.</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar"></div>
+                        <div class="author-info">
+                            <h4>Satish Patel</h4>
+                            <p>Founder & CEO, Huddle</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial">
+                    <p>Fylo has improved our team productivity by an order of magnitude. Since making the switch our team has become a well-oiled collaboration machine.</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar"></div>
+                        <div class="author-info">
+                            <h4>Bruce McKenzie</h4>
+                            <p>Founder & CEO, Huddle</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial">
+                    <p>Fylo has improved our team productivity by an order of magnitude. Since making the switch our team has become a well-oiled collaboration machine.</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar"></div>
+                        <div class="author-info">
+                            <h4>Iva Boyd</h4>
+                            <p>Founder & CEO, Huddle</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="container">
+            <div class="cta-box">
+                <h2>Get early access today</h2>
+                <p>It only takes a minute to sign up and our free starter tier is extremely generous. If you have any questions, our support team would be happy to help you.</p>
+                <form class="cta-form" id="ctaForm">
+                    <div class="input-container">
+                        <input type="email" class="cta-input" id="emailInput" placeholder="email@example.com" required>
+                        <div class="error-message" id="errorMessage"></div>
+                        <div class="success-message" id="successMessage"></div>
+                    </div>
+                    <button type="submit" class="btn-cta" id="submitBtn">Get Started For Free</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <div class="footer-logo">Fylo</div>
+                    <div class="footer-info">
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <p>+1-543-123-4567</p>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <p>example@fylo.com</p>
+                    </div>
+                </div>
+                <div>
+                    <ul class="footer-links">
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Jobs</a></li>
+                        <li><a href="#">Press</a></li>
+                        <li><a href="#">Blog</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <ul class="footer-links">
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Terms</a></li>
+                        <li><a href="#">Privacy</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <div class="footer-social">
+                        <a href="#" class="social-link">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        const hamburger = document.getElementById('hamburger');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileOverlay = document.getElementById('mobileOverlay');
+        const mobileNavLinks = document.querySelectorAll('.mobile-menu .nav-links a');
+
+        function toggleMobileMenu() {
+            hamburger.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+            mobileOverlay.classList.toggle('active');
+            document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : 'auto';
+        }
+
+        function closeMobileMenu() {
+            hamburger.classList.remove('active');
+            mobileMenu.classList.remove('active');
+            mobileOverlay.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        hamburger.addEventListener('click', toggleMobileMenu);
+        mobileOverlay.addEventListener('click', closeMobileMenu);
+
+        // Close mobile menu when clicking nav links
+        mobileNavLinks.forEach(link => {
+            link.addEventListener('click', closeMobileMenu);
+        });
+
+        // Close mobile menu on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeMobileMenu();
+            }
+        });
+
+        // Form Validation
+        const ctaForm = document.getElementById('ctaForm');
+        const emailInput = document.getElementById('emailInput');
+        const errorMessage = document.getElementById('errorMessage');
+        const successMessage = document.getElementById('successMessage');
+        const submitBtn = document.getElementById('submitBtn');
+
+        function validateEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        function showError(message) {
+            emailInput.classList.add('error');
+            emailInput.classList.remove('success');
+            errorMessage.textContent = message;
+            errorMessage.classList.add('show');
+            successMessage.classList.remove('show');
+        }
+
+        function showSuccess(message) {
+            emailInput.classList.add('success');
+            emailInput.classList.remove('error');
+            successMessage.textContent = message;
+            successMessage.classList.add('show');
+            errorMessage.classList.remove('show');
+        }
+
+        function clearMessages() {
+            emailInput.classList.remove('error', 'success');
+            errorMessage.classList.remove('show');
+            successMessage.classList.remove('show');
+        }
+
+        // Real-time validation
+        emailInput.addEventListener('input', () => {
+            const email = emailInput.value.trim();
+            
+            if (email === '') {
+                clearMessages();
+            } else if (!validateEmail(email)) {
+                showError('Please enter a valid email address');
+            } else {
+                showSuccess('Email looks good!');
+            }
+        });
+
+        // Form submission
+        ctaForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const email = emailInput.value.trim();
+            
+            if (email === '') {
+                showError('Email address is required');
+                emailInput.focus();
+                return;
+            }
+            
+            if (!validateEmail(email)) {
+                showError('Please enter a valid email address');
+                emailInput.focus();
+                return;
+            }
+
+            // Simulate form submission
+            submitBtn.textContent = 'Submitting...';
+            submitBtn.disabled = true;
+            
+            setTimeout(() => {
+                showSuccess('Thank you! We\'ll be in touch soon.');
+                emailInput.value = '';
+                submitBtn.textContent = 'Get Started For Free';
+                submitBtn.disabled = false;
+                
+                setTimeout(() => {
+                    clearMessages();
+                }, 3000);
+            }, 1500);
+        });
+
+        // Clear validation on focus
+        emailInput.addEventListener('focus', () => {
+            if (emailInput.value.trim() === '') {
+                clearMessages();
+            }
+        });
+    </script>
+</body>
+</html>
