@@ -40,16 +40,17 @@ function toggleMobileMenu() {
   else openMobileMenu();
 }
 
-if (hamburger && mobileOverlay && mobileMenu) {
-  hamburger.addEventListener("click", toggleMobileMenu);
-  mobileOverlay.addEventListener("click", closeMobileMenu);
+hamburger.addEventListener("click", toggleMobileMenu);
+mobileOverlay.addEventListener("click", closeMobileMenu);
 
-  mobileNavLinks.forEach((link) => link.addEventListener("click", closeMobileMenu));
+mobileNavLinks.forEach((link) => {
+  link.addEventListener("click", closeMobileMenu);
+});
 
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && isMenuOpen()) closeMobileMenu();
-  });
-}
+// Close mobile menu on Escape key (only if open)
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && isMenuOpen()) closeMobileMenu();
+});
 
 // Form Validation
 const ctaForm = document.getElementById("ctaForm");

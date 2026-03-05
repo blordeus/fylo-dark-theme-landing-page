@@ -16,40 +16,40 @@ function openMobileMenu() {
   mobileOverlay.classList.add("active");
   document.body.style.overflow = "hidden";
 
-  // Accessibility state
-  hamburger.setAttribute("aria-expanded", "true");
-  hamburger.setAttribute("aria-label", "Close menu");
+  // Accessibility statehamburger.setAttribute("aria-expanded", "true");
+    hamburger.setAttribute("aria-label", "Close menu");
   
 }
 
 function closeMobileMenu() {
-  if (!hamburger || !mobileMenu || !mobileOverlay) return;
-
   hamburger.classList.remove("active");
   mobileMenu.classList.remove("active");
   mobileOverlay.classList.remove("active");
   document.body.style.overflow = "auto";
 
-  hamburger.setAttribute("aria-expanded", "false");
-  hamburger.setAttribute("aria-label", "Open menu");
+  // Accessibility state
+  if (hamburger.tagName.toLowerCase() === "button") {
+    hamburger.setAttribute("aria-expanded", "false");
+    hamburger.setAttribute("aria-label", "Open menu");
+  }
 }
 
 function toggleMobileMenu() {
-  if (!hamburger || !mobileMenu || !mobileOverlay) return;
   if (isMenuOpen()) closeMobileMenu();
   else openMobileMenu();
 }
 
-if (hamburger && mobileOverlay && mobileMenu) {
-  hamburger.addEventListener("click", toggleMobileMenu);
-  mobileOverlay.addEventListener("click", closeMobileMenu);
+hamburger.addEventListener("click", toggleMobileMenu);
+mobileOverlay.addEventListener("click", closeMobileMenu);
 
-  mobileNavLinks.forEach((link) => link.addEventListener("click", closeMobileMenu));
+mobileNavLinks.forEach((link) => {
+  link.addEventListener("click", closeMobileMenu);
+});
 
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && isMenuOpen()) closeMobileMenu();
-  });
-}
+// Close mobile menu on Escape key (only if open)
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && isMenuOpen()) closeMobileMenu();
+});
 
 // Form Validation
 const ctaForm = document.getElementById("ctaForm");
